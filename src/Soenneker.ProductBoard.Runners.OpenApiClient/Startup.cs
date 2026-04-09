@@ -1,9 +1,12 @@
 using Microsoft.Extensions.DependencyInjection;
 using Soenneker.Kiota.Util.Registrars;
 using Soenneker.Managers.Runners.Registrars;
+using Soenneker.OpenApi.Fixer.Registrars;
+using Soenneker.OpenApi.Merger.Registrars;
 using Soenneker.ProductBoard.Runners.OpenApiClient.Utils;
 using Soenneker.ProductBoard.Runners.OpenApiClient.Utils.Abstract;
 using Soenneker.Utils.File.Download.Registrars;
+using Soenneker.Utils.Yaml.Registrars;
 
 namespace Soenneker.ProductBoard.Runners.OpenApiClient;
 
@@ -24,7 +27,10 @@ public static class Startup
                 .AddScoped<IFileOperationsUtil, FileOperationsUtil>()
                 .AddRunnersManagerAsScoped()
                 .AddFileDownloadUtilAsScoped()
-                .AddKiotaUtilAsScoped();
+                .AddOpenApiMergerAsScoped()
+                .AddOpenApiFixerAsScoped()
+                .AddKiotaUtilAsScoped()
+                .AddYamlUtilAsScoped();
 
         return services;
     }
