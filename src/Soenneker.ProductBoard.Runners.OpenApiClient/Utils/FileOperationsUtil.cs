@@ -110,6 +110,9 @@ public sealed class FileOperationsUtil : IFileOperationsUtil
 
         await _kiotaUtil.Generate(fixedFilePath, "ProductBoardOpenApiClient", Constants.Library, gitDirectory, cancellationToken).NoSync();
 
+        await _fileUtil.Delete(mergedJsonPath, cancellationToken: cancellationToken);
+        await _fileUtil.Delete(fixedFilePath, cancellationToken: cancellationToken);
+
         await BuildAndPush(gitDirectory, cancellationToken).NoSync();
     }
 
