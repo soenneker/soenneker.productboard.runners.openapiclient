@@ -151,7 +151,9 @@ public sealed class FileOperationsUtil : IFileOperationsUtil
 
             // Delete all empty subdirectories
             List<string> dirs = await _directoryUtil.GetAllDirectoriesRecursively(directoryPath, cancellationToken);
-            foreach (string dir in dirs.OrderByDescending(d => d.Length))
+            // Process children before parents without allocating LINQ sorting buffers.
+            dirs.Sort(static (left, right) => right.Length.CompareTo(left.Length));
+            foreach (string dir in dirs)
             {
                 try
                 {
