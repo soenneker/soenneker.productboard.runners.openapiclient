@@ -73,6 +73,7 @@ public sealed class FileOperationsUtil : IFileOperationsUtil
 
         string yamlDirectory = Path.Combine(gitDirectory, "openapi-yaml");
         string jsonDirectory = Path.Combine(gitDirectory, "openapi-json");
+        await _directoryUtil.DeleteIfExists(jsonDirectory, cancellationToken);
         await _directoryUtil.Create(yamlDirectory, cancellationToken: cancellationToken);
         await _directoryUtil.Create(jsonDirectory, cancellationToken: cancellationToken);
 
@@ -89,6 +90,7 @@ public sealed class FileOperationsUtil : IFileOperationsUtil
             await _fileUtil.DeleteIfExists(jsonTargetPath, cancellationToken: cancellationToken);
 
             await _yamlUtil.SaveAsJson(yamlFilePath ?? yamlPath, jsonTargetPath, true, cancellationToken);
+            await _openApiFixer.Fix(jsonTargetPath, jsonTargetPath, cancellationToken).NoSync();
         }
 
         string mergedJson = _openApiMerger.ToJson(await _openApiMerger.MergeDirectory(jsonDirectory, cancellationToken).NoSync());
