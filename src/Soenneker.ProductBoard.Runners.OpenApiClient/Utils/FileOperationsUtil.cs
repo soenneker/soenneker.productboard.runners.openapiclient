@@ -83,7 +83,8 @@ public sealed class FileOperationsUtil : IFileOperationsUtil
             await _fileUtil.DeleteIfExists(yamlPath, cancellationToken: cancellationToken);
 
             string url = _bundledSpecBaseUrl + fileName;
-            _logger.LogInformation("Downloading ProductBoard OpenAPI bundle {FileName} ...", fileName);
+            if (_logger.IsEnabled(LogLevel.Information))
+                _logger.LogInformation("Downloading ProductBoard OpenAPI bundle {FileName} ...", fileName);
             string? yamlFilePath = await _fileDownloadUtil.Download(url, yamlPath, fileExtension: Path.GetExtension(fileName), cancellationToken: cancellationToken);
 
             string jsonTargetPath = Path.Combine(jsonDirectory, Path.ChangeExtension(fileName, ".json"));
@@ -143,7 +144,8 @@ public sealed class FileOperationsUtil : IFileOperationsUtil
                     try
                     {
                         await _fileUtil.Delete(file, ignoreMissing: true, log: false, cancellationToken);
-                        _logger.LogInformation("Deleted file: {FilePath}", file);
+                        if (_logger.IsEnabled(LogLevel.Information))
+                            _logger.LogInformation("Deleted file: {FilePath}", file);
                     }
                     catch (Exception ex)
                     {
@@ -165,7 +167,8 @@ public sealed class FileOperationsUtil : IFileOperationsUtil
                     if (dirFiles.Count == 0 && subDirs.Count == 0)
                     {
                         await _directoryUtil.Delete(dir, cancellationToken);
-                        _logger.LogInformation("Deleted empty directory: {DirectoryPath}", dir);
+                        if (_logger.IsEnabled(LogLevel.Information))
+                            _logger.LogInformation("Deleted empty directory: {DirectoryPath}", dir);
                     }
                 }
                 catch (Exception ex)
